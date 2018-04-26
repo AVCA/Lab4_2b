@@ -84,7 +84,7 @@ public class GUI extends JFrame{
 		//Evento:
 		btn_generar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				System.out.println("eeeeeeeeeeeee");
+				 generar();
 			}
 		});
 		
@@ -124,15 +124,14 @@ public class GUI extends JFrame{
 	}
 
 	//Eventos:
-	private void cargar()
-	{
-		new Selector_archivo(this);
-		ArrayList<String> direcciones = new ArrayList<String>();
-		
-	}
-	
 	private void generar()
 	{
+		// Direccion de la carpeta que contiene las fotos a cargar
+		String direccion = txt_direccion.getText();
+		// Metodo que leera la carpeta y almacenara los nombres de cada imagen?
+		// dentro de una lista ?
+		
+		//
 		
 	}
 }
