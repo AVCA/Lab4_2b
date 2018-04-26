@@ -15,6 +15,10 @@ Lo malo es que tenemos que cargar 5 imagenes por persona,
 asi que mi idea no sea tan util. Talves tengamos que agregar de 5
 en 5 los datos al archivo arff?
 
+**25/04/18:**
+La interfaz permite seleccionar la carpeta que contiene todas las fotos
+que se agregaran al conjunto de datos ARFF
+
 ### 2) Almacenar la direccion de las imagenes cargadas.
 
 ### 3) Tomar cada imagen cargada y leer sus pixeles: *Clase: ejecutark.java
