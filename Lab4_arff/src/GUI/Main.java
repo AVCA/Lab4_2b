@@ -11,7 +11,6 @@ public class Main {
 				try {
 					//Crea interfaz grafica:
 					GUI frame = new GUI();
-					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}

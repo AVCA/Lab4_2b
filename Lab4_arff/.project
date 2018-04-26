@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
-	<name>Lab4_2b</name>
+	<name>Lab4_arff</name>
 	<comment></comment>
 	<projects>
 	</projects>
 	<buildSpec>
-	<natures>
 		<buildCommand>
 			<name>org.eclipse.jdt.core.javabuilder</name>
 			<arguments>
@@ -14,3 +13,5 @@
 	</buildSpec>
 	<natures>
 		<nature>org.eclipse.jdt.core.javanature</nature>
+	</natures>
+</projectDescription>
