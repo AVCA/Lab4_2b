@@ -5,7 +5,12 @@
 	<projects>
 	</projects>
 	<buildSpec>
+	<natures>
+		<buildCommand>
+			<name>org.eclipse.jdt.core.javabuilder</name>
+			<arguments>
+			</arguments>
+		</buildCommand>
 	</buildSpec>
 	<natures>
-	</natures>
-</projectDescription>
+		<nature>org.eclipse.jdt.core.javanature</nature>
