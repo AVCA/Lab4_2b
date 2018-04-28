@@ -4,7 +4,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
-import javax.swing.filechooser.FileNameExtensionFilter;
 
 import GUI.GUI;
 
@@ -21,16 +20,14 @@ public class Selector_archivo implements ActionListener {
 		// JFileChooser:
 		JFileChooser chooser = new JFileChooser();
 		// Mostrar archivos txt y arff
-		FileNameExtensionFilter filter = new FileNameExtensionFilter("Text","txt", "arff");
-		chooser.setFileFilter(filter);
+		chooser.setFileSelectionMode(chooser.DIRECTORIES_ONLY);
 		int returnVal = chooser.showOpenDialog(dir);
 		if (returnVal == JFileChooser.APPROVE_OPTION) {
 			if (chooser.getSelectedFile().exists()) {
-				
+				dir.txt_direccion.setText(chooser.getSelectedFile().toString());
 			} else
-				JOptionPane.showMessageDialog(dir, "ERROR: File doesn't exist!");
+				JOptionPane.showMessageDialog(dir, "ERROR: Folder doesn't exist!");
 		}
-
 	}
 
 }
