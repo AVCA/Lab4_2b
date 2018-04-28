@@ -9,18 +9,13 @@ import javax.swing.border.TitledBorder;
 import javax.swing.JTextField;
 import javax.swing.UIManager;
 import java.awt.Color;
-import javax.swing.JTree;
 
 import Archivo.Selector_archivo;
 import Generador.Generador;
 
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
 import javax.swing.GroupLayout;
-import javax.swing.GroupLayout.Alignment;
-import javax.swing.LayoutStyle.ComponentPlacement;
 
 public class GUI extends JFrame{
 
@@ -30,6 +25,7 @@ public class GUI extends JFrame{
 	public JTextArea txt_area_ARFF;
 	// TextField
 	public JTextField txt_direccion;
+	public JTextField txt_n;
 	// Frame
 	public JFrame frame;
 	// Panel
@@ -41,8 +37,7 @@ public class GUI extends JFrame{
 	public JButton btn_generar;
 	// Scroll Panel
 	public JScrollPane scrollPane;
-	private JTextField textField;
-	private JTextField txt_n;
+	
 	
 	// Se crea el objeto GUI
 	public GUI() {
@@ -86,10 +81,6 @@ public class GUI extends JFrame{
 		
 		JPanel panel = new JPanel();
 		panel_conjunto.add(panel, BorderLayout.SOUTH);
-		
-		textField = new JTextField();
-		textField.setText("5");
-		textField.setColumns(2);
 		
 		JLabel label = new JLabel("Numero de fotos por persona");
 		GroupLayout gl_panel = new GroupLayout(panel);
