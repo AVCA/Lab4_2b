@@ -16,7 +16,7 @@ public class Generador implements ActionListener {
 	ArrayList<String> clases;
 	ArrayList<ArrayList<String>> direccion_bmp;
 	int n;
-
+ 
 	public Generador(GUI x) {
 		super();
 		gui = x;
