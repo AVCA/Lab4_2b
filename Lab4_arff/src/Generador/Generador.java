@@ -78,7 +78,7 @@ public class Generador implements ActionListener {
 
 	// Metodo que obtendra la informacion necesaria de cada bmp
 	public void bmp_lectura() {
-		// Bmps por persona:
+		// Bmps por persona: 
 		for(int i=0;i<direccion_bmp.size();i++) {
 			System.out.println(direccion_bmp.get(i));
 		}
