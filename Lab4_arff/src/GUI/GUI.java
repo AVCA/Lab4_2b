@@ -1,31 +1,26 @@
 package GUI;
 
-import java.awt.EventQueue;
-
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import java.awt.BorderLayout;
-import java.awt.GridBagLayout;
-import java.awt.GridLayout;
 import javax.swing.JLabel;
 import javax.swing.JButton;
 import javax.swing.border.TitledBorder;
-import javax.swing.SwingConstants;
 import javax.swing.JTextField;
 import javax.swing.UIManager;
 import java.awt.Color;
 import javax.swing.JTree;
-import javax.swing.tree.DefaultTreeModel;
 
 import Archivo.Selector_archivo;
+import Generador.Generador;
 
-import javax.swing.tree.DefaultMutableTreeNode;
-import javax.swing.JTabbedPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
 import java.awt.event.ActionEvent;
+import javax.swing.GroupLayout;
+import javax.swing.GroupLayout.Alignment;
+import javax.swing.LayoutStyle.ComponentPlacement;
 
 public class GUI extends JFrame{
 
@@ -46,6 +41,8 @@ public class GUI extends JFrame{
 	public JButton btn_generar;
 	// Scroll Panel
 	public JScrollPane scrollPane;
+	private JTextField textField;
+	private JTextField textField_1;
 	
 	// Se crea el objeto GUI
 	public GUI() {
@@ -81,29 +78,40 @@ public class GUI extends JFrame{
 		txt_direccion.setColumns(10);
 		
 		JButton btn_generar = new JButton("Generar");
-		//Evento:
-		btn_generar.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				 generar();
-			}
-		});
+		// Evento:
+		btn_generar.addActionListener(new Generador(this));
+		
 		
 		panel_conjunto.add(btn_generar, BorderLayout.EAST);
 		
+		JPanel panel = new JPanel();
+		panel_conjunto.add(panel, BorderLayout.SOUTH);
+		
+		textField = new JTextField();
+		textField.setText("5");
+		textField.setColumns(2);
+		
+		JLabel label = new JLabel("Numero de fotos por persona");
+		GroupLayout gl_panel = new GroupLayout(panel);
+		panel.setLayout(gl_panel);
+		
+		JPanel panel_1 = new JPanel();
+		panel_north.add(panel_1, BorderLayout.CENTER);
+		panel_1.setLayout(new BorderLayout(0, 0));
+		
+		JPanel panel_2 = new JPanel();
+		panel_1.add(panel_2, BorderLayout.WEST);
+		
+		textField_1 = new JTextField();
+		panel_2.add(textField_1);
+		textField_1.setText("5");
+		textField_1.setColumns(3);
+		
+		JLabel lblNumeroDeFotos = new JLabel("Numero de fotos por persona");
+		panel_1.add(lblNumeroDeFotos);
+		
 		JPanel panel_espacio = new JPanel();
 		panel_north.add(panel_espacio, BorderLayout.SOUTH);
-		
-		JPanel panel_west = new JPanel();
-		frame.getContentPane().add(panel_west, BorderLayout.WEST);
-		panel_west.setLayout(new BorderLayout(0, 0));
-		
-		JPanel panel_tree = new JPanel();
-		panel_tree.setBorder(new TitledBorder(UIManager.getBorder("TitledBorder.border"), "Archivos", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 0, 0)));
-		panel_west.add(panel_tree);
-		panel_tree.setLayout(new BorderLayout(0, 0));
-		
-		JTree tree = new JTree();
-		panel_tree.add(tree);
 		
 		JPanel panel_center = new JPanel();
 		frame.getContentPane().add(panel_center, BorderLayout.CENTER);
@@ -121,17 +129,5 @@ public class GUI extends JFrame{
 		
 		JScrollPane scrollPane = new JScrollPane(txt_area_ARFF);
 		panel_ARFF.add(scrollPane, BorderLayout.CENTER);
-	}
-
-	//Eventos:
-	private void generar()
-	{
-		// Direccion de la carpeta que contiene las fotos a cargar
-		String direccion = txt_direccion.getText();
-		// Metodo que leera la carpeta y almacenara los nombres de cada imagen?
-		// dentro de una lista ?
-		
-		//
-		
 	}
 }
