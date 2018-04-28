@@ -7,11 +7,13 @@ import GUI.*;
 public class Generador implements ActionListener {
 
 	// V A R I A B L E S:
-	GUI dir;
+	GUI gui;
+	String direccion;
 
 	public Generador(GUI x) {
 		super();
-		dir = x;
+		gui = x;
+		direccion = x.txt_direccion.getText();
 	}
 	
 	// Metodo que inicia el proceso:

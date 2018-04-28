@@ -42,7 +42,7 @@ public class GUI extends JFrame{
 	// Scroll Panel
 	public JScrollPane scrollPane;
 	private JTextField textField;
-	private JTextField textField_1;
+	private JTextField txt_n;
 	
 	// Se crea el objeto GUI
 	public GUI() {
@@ -102,10 +102,10 @@ public class GUI extends JFrame{
 		JPanel panel_2 = new JPanel();
 		panel_1.add(panel_2, BorderLayout.WEST);
 		
-		textField_1 = new JTextField();
-		panel_2.add(textField_1);
-		textField_1.setText("5");
-		textField_1.setColumns(3);
+		txt_n = new JTextField();
+		panel_2.add(txt_n);
+		txt_n.setText("5");
+		txt_n.setColumns(3);
 		
 		JLabel lblNumeroDeFotos = new JLabel("Numero de fotos por persona");
 		panel_1.add(lblNumeroDeFotos);
