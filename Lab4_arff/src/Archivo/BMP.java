@@ -73,7 +73,7 @@ public class BMP{
 			System.out.println("Colores RGB del 1° pixel:");
 			// Los pixeles comienzan desde el bit 54
 			// pero estan el en orden B G R
-			// por eso i comienza en R, es decir 56
+			// por eso i comienza en R, es decir 56 
 			int i=56; 
 			System.out.println("R: "+Integer.parseInt(hexa[i--], 16));
 			System.out.println("G: "+Integer.parseInt(hexa[i--], 16));
