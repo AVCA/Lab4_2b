@@ -29,11 +29,7 @@ Necesitamos:
   (Esto debo de tenerlo yo - [Ana])
 
 ### 4) Dividir sus pixeles en 4 cuadrantes
-Tomaremos un rango de pixeles dependiendo de su tamaño
-Ejemplo:
-Alto:
-Ancho:
-K1 = [ - ]
+Tomaremos un rango de pixeles dependiendo de su tamaño.
 
 **28/04/18:**
 Ya es posible obtener los RGB por pixel y por cuadrante
