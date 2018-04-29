@@ -115,7 +115,7 @@ public class Generador implements ActionListener {
 		// Ciclo por persona
 		for(int i=0;i<1;i++) {
 			// Ciclo por foto
-			for(int j=0;j<n;j++) {
+			for(int j=0;j<1;j++) {
 				String directorio = direccion+"\\"+direccion_bmp.get(i).get(j);
 				BMP archivo = new BMP();
 				File file = new File(directorio);

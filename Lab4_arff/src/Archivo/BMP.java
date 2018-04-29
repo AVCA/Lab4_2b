@@ -5,34 +5,38 @@ import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileInputStream;
+import java.util.ArrayList;
 
-public class BMP{
-	String a;
-	String r;
+public class BMP {
+	// V A R I A B L E S
 	int ancho, largo;
-	BufferedImage imagen;
-	byte[] bytes;
-	String[] hexa;
+
+	byte[] bytes; // Arreglo que almacena los bytes que contiene el bmp
+	String[] hexa; // Arreglo que contiene los bytes convertidos en hexadecimal
+	ArrayList<ArrayList<Integer>> pixel;
+	ArrayList<ArrayList<ArrayList<Integer>>> cuadrantes;
+
 	Frame ventana;
 	Panel panel;
-	
-	//Metodo: Lee el archivo y almacena RGB, BYTE y STRING
+
+	// Metodo: Lee el archivo y almacena RGB, BYTE y STRING
 	public void Bytes(File file) {
 		int i = 0;
 		FileInputStream archivo = null;
-		bytes= new byte[(int)file.length()];
-		hexa = new String[(int)file.length()];
+		bytes = new byte[(int) file.length()];
+		hexa = new String[(int) file.length()];
 		try {
-			
+
 			// Lee el archivo y guarda los BYTES en el vector
 			archivo = new FileInputStream(file);
 			archivo.read(bytes);// <-- Lee y guarda cada byte
 			archivo.close();
-			
+
 			// Convertimos los BYTES en HEXADECIMAL
 			while (true) {
 				// Se almacenan en String
-				String a = String.format("%02X", bytes[i]); // <--String.format me deja convertir BYTE a Hexa gracias a "%02X", tambien se puede pasar a decimal
+				String a = String.format("%02X", bytes[i]); // <--String.format me deja convertir BYTE a Hexa gracias a
+															// "%02X", tambien se puede pasar a decimal
 				hexa[i] = a; // <-- Se almacena en un arreglo String
 				i++;
 			}
@@ -41,13 +45,12 @@ public class BMP{
 			// Manejar Error
 		}
 	}
-	
-	//Metodo: Imprime los valores de la cabezera
+
+	// Metodo: Imprime los valores de la cabezera
 	public void Info() {
-		try
-		{
 			String a = new String(new byte[] { bytes[0] });
 			String b = new String(new byte[] { bytes[1] });
+			String r;
 			System.out.println("            Cabecera:             ");
 			System.out.println("Tipo de Archivo: " + a + b);
 			r = hexa[5] + hexa[4] + hexa[3] + hexa[2];
@@ -73,73 +76,125 @@ public class BMP{
 			System.out.println("Colores RGB del 1° pixel:");
 			// Los pixeles comienzan desde el bit 54
 			// pero estan el en orden B G R
-			// por eso i comienza en R, es decir 56 
-			int i=56; 
-			System.out.println("R: "+Integer.parseInt(hexa[i--], 16));
-			System.out.println("G: "+Integer.parseInt(hexa[i--], 16));
-			System.out.println("B: "+Integer.parseInt(hexa[i--], 16));
-			System.out.println("==================================");
+			// por eso i comienza en R, es decir 56
+			// Aunque este sea el "primer" pixel grafico, enrealidad
+			// es el ultimo [esquina inferior derecha]
+			int i = 56;
+			System.out.println("R: " + Integer.parseInt(hexa[i--], 16));
+			System.out.println("G: " + Integer.parseInt(hexa[i--], 16));
+			System.out.println("B: " + Integer.parseInt(hexa[i--], 16));
+			rgb();
+	}
+
+	public void rgb() {
+		pixel = new ArrayList<ArrayList<Integer>>();
+		
+		int i = ((int) bytes.length) - 1; // <-Total de bytes
+		for (int x = 0; x < largo; x++) {
+			for (int y = ancho; y > 0; y--) {
+				ArrayList<Integer> RGB = new ArrayList<Integer>();
+				// Empieza a leer desde el ultimo byte hasta el inicio
+				// De lo contrario la imagen se mostraria alrevez
+				int blue = Integer.parseInt(hexa[i--], 16);
+				RGB.add(blue);
+				int green = Integer.parseInt(hexa[i--], 16);
+				RGB.add(green);
+				int red = Integer.parseInt(hexa[i--], 16);
+				RGB.add(red);
+				pixel.add(RGB);
+			}
 		}
-		catch(Exception e)
-		{
-			System.out.println("Error");
+		System.out.println("=============================");
+		System.out.println("Colores RGB por pixel:");
+		int pixel_cuadrante = pixel.size()/4;
+		int p_c = pixel_cuadrante;
+		int k=0;
+		cuadrantes = new ArrayList<ArrayList<ArrayList<Integer>>>();
+		ArrayList<ArrayList<Integer>> cuadrante = new ArrayList<ArrayList<Integer>>();
+		for(int j=0;j<pixel.size();j++) {
+			if(j==0) {
+				//System.out.println("=============================");
+				//System.out.println("Cuadrante :"+k);k++;
+				cuadrante = new ArrayList<ArrayList<Integer>>();
+			}
+			else
+			{
+				if(j==pixel_cuadrante)
+				{
+					cuadrantes.add(cuadrante);
+					pixel_cuadrante +=p_c;
+					cuadrante = new ArrayList<ArrayList<Integer>>();
+					//System.out.println("=============================");
+					//System.out.println("Cuadrante :"+k);k++;
+				}
+			}
+			cuadrante.add(pixel.get(j));
+			//System.out.println(j+""+pixel.get(j));
+			if(j==pixel.size()-1) {
+				cuadrantes.add(cuadrante);
+			}
+		}
+		for(i=0; i<cuadrantes.size();i++) {
+			System.out.println("=============================");
+			System.out.println("Cuadrante "+i+":");
+			for(int j=0; j<cuadrantes.get(i).size(); j++ )
+			{
+				System.out.println(j+": "+cuadrantes.get(i).get(j));
+			}
 		}
 	}
 
-	//Metodo: Crea la interfaz que mostrara la imagen
+	// Metodo: Crea la interfaz que mostrara la imagen
 	public void ventana(File file) {
 		ventana = new Frame(file.getName());
-		ventana.setSize(ancho+25, largo+45);
-		ventana.addWindowListener(new WindowAdapter()
-		{
-			public void windowClosing(WindowEvent e)
-			{
+		ventana.setSize(ancho + 25, largo + 45);
+		ventana.addWindowListener(new WindowAdapter() {
+			public void windowClosing(WindowEvent e) {
 				System.exit(0);
 			}
 		});
-		
+
 		panel = new Panel();
-		
+
 		ventana.add(panel);
 		ventana.setVisible(true);
 	}
-	
-	//Metodo: Base para pintar la imagen
-	public void Canvas()
-	{
+
+	// Metodo: Base para pintar la imagen
+	public void Canvas() {
 		panel.add(new MyCanvas());
 		ventana.setVisible(true);
 	}
-	
-	//Metodo: Pinta cada pixel del canvas con los RGB del archivo
+
+	// Metodo: Pinta cada pixel del canvas con los RGB del archivo
 	public class MyCanvas extends Canvas {
 
-	      public MyCanvas () {
-	         setSize(ancho, largo);
-	      }
+		public MyCanvas() {
+			setSize(ancho, largo);
+		}
 
-	      public void paint (Graphics g) {
-	         Graphics2D g2;
-	         g2 = (Graphics2D) g;
-	         int i=((int)bytes.length)-1; //<-Total de bytes que mostrare
-	         for(int x = 0; x < largo; x++) {
-	             for(int y = ancho; y > 0; y--) {
-	            	 //Empieza a leer desde el ultimo byte hasta el inicio
-	            	 //De lo contrario la imagen se mostraria alrevez
-	            	 int blue= Integer.parseInt(hexa[i--], 16);
-	            	 //i--; //<-- Sin esto no lee el siguente byte
-	            	 int green = Integer.parseInt(hexa[i--], 16);
-	            	 int red = Integer.parseInt(hexa[i--], 16);
-	            	 //Asignamos el color rgb con los ints
-	                 g.setColor(new Color(blue,green,red));
-	                 //Dibujamos el pixel con las coordenadas de y x
-	                 //Tambien puede usarse g.drawRect(y,x,1,1) y muestra el
-	                 //mismo resultado
-	                 g.drawRect(y,x, 1, 1);
-	             }
-	         }
-	         
-	      }
-	   }
-	
+		public void paint(Graphics g) {
+			Graphics2D g2;
+			g2 = (Graphics2D) g;
+			int i = ((int) bytes.length) - 1; // <-Total de bytes que mostrare
+			for (int x = 0; x < largo; x++) {
+				for (int y = ancho; y > 0; y--) {
+					// Empieza a leer desde el ultimo byte hasta el inicio
+					// De lo contrario la imagen se mostraria alrevez
+					int blue = Integer.parseInt(hexa[i--], 16);
+					// i--; //<-- Sin esto no lee el siguente byte
+					int green = Integer.parseInt(hexa[i--], 16);
+					int red = Integer.parseInt(hexa[i--], 16);
+					// Asignamos el color rgb con los ints
+					g.setColor(new Color(blue, green, red));
+					// Dibujamos el pixel con las coordenadas de y x
+					// Tambien puede usarse g.drawRect(y,x,1,1) y muestra el
+					// mismo resultado
+					g.drawRect(y, x, 1, 1);
+				}
+			}
+
+		}
+	}
+
 }
