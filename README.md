@@ -35,6 +35,11 @@ Alto:
 Ancho:
 K1 = [ - ]
 
+**28/04/18:**
+Ya es posible obtener los RGB por pixel y por cuadrante
+Toda la informacion esta almacenada en un ArrayList de 3 niveles
+
+[Cuadrante 0 [Pixeles [R,G,B],[R,G,B],[R,G,B]....,[R,G,B]]
 
 ### 5) Calculamos la media y desviacion estandar de cada uno de los colores
 media =
