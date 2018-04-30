@@ -5,40 +5,12 @@ Desarrolle un programa Java (buildarff.java) que le permita extender o formar un
 
 ## Algoritmo
 ### 1) Diseñar interfaz que nos permita cargar todas las fotos.
-
-[Ana]: Tengo pensado cargar todas de una sola ves o 
-cargar la direccion de la carpeta que las contiene
-y almacenar sus direcciones en una lista
-*bmp_direccion.add(C:/1.bmp)*
-
-Lo malo es que tenemos que cargar 5 imagenes por persona,
-asi que mi idea no sea tan util. Talves tengamos que agregar de 5
-en 5 los datos al archivo arff?
-
-**25/04/18:**
-La interfaz permite seleccionar la carpeta que contiene todas las fotos
-que se agregaran al conjunto de datos ARFF
-
 ### 2) Almacenar la direccion de las imagenes cargadas.
-
-### 3) Tomar cada imagen cargada y leer sus pixeles: *Clase: ejecutark.java
-
-Necesitamos:
-  Ancho y alto de la imagen
-  Lector binario
-  (Esto debo de tenerlo yo - [Ana])
-
+### 3) Tomar cada imagen cargada y leer sus pixeles: 
 ### 4) Dividir sus pixeles en 4 cuadrantes
-Tomaremos un rango de pixeles dependiendo de su tamaño.
-
-**28/04/18:**
-Hay que implementar la clase que nos dio la doctora
-
 ### 5) Calculamos la media y desviacion estandar de cada uno de los colores
-media =
-desviacion estandar =
 
 ### 6) Almacenamos los resultados en cuadante"k".txt donde k es el numero del cuadrante.
-Ejemplo:
+Ya imprime todos los resultados en consola, solo falta almacenarlos
 
 ### 7) Generamos o agregamos los valores de los cuadrantes.txt al archivo rgbfotos.arff
