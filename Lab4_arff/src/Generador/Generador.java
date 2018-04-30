@@ -19,6 +19,7 @@ import java.util.regex.Pattern;
 
 import javax.imageio.ImageIO;
 
+import Archivo.ARFF;
 import Archivo.BMP;
 import GUI.*;
 
@@ -26,6 +27,7 @@ public class Generador implements ActionListener {
 
 	// V A R I A B L E S:
 	GUI gui;
+	ARFF fotos;
 	String direccion;
 	ArrayList<String> clases;
 	ArrayList<ArrayList<String>> direccion_bmp;
@@ -44,11 +46,17 @@ public class Generador implements ActionListener {
 		n = Integer.parseInt(gui.txt_n.getText());
 		direccion_bmp = new ArrayList<ArrayList<String>>();
 		clases = new ArrayList<String>();
+		fotos = new ARFF();
 		// Metodo que obtendra la lista que almacenara los nombres de las fotos
 		fotos();
 		// Metodo para obtener info
 		bmp_info();
-		// 
+		//
+		int m=direccion_bmp.size();
+		System.out.println("Generando rgbfotos.arff");
+		System.out.println(".....");
+		fotos.Lectura(m);
+		System.out.println("Listo!");
 	}
 
 	// Metodo que obtendra la lista que almacenara los nombres de las fotos
@@ -108,20 +116,20 @@ public class Generador implements ActionListener {
 		// Ciclo por persona
 		for (int i = 0; i < direccion_bmp.size(); i++) {
 			// Ciclo por foto
-			System.out.println("============================================");
-			System.out.println("Persona: " + i);
+			//System.out.println("============================================");
+			//System.out.println("Persona: " + i);
 			for (int j = 0; j < direccion_bmp.get(0).size(); j++) {
-				System.out.println("------------------------------");
-				System.out.println("Foto: "+j);
+				//System.out.println("------------------------------");
+				//System.out.println("Foto: "+j);
 				String directorio = direccion + "\\" + direccion_bmp.get(i).get(j);
 				String bmp = direccion_bmp.get(i).get(j);
-				System.out.println("Cuadrante 0");
+				//System.out.println("Cuadrante 0");
 				ejecutar(directorio, bmp, "cuadrante0.txt", i);
-				System.out.println("Cuadrante 1");
+				//System.out.println("Cuadrante 1");
 				ejecutar(directorio, bmp, "cuadrante1.txt", i);
-				System.out.println("Cuadrante 2");
+				//System.out.println("Cuadrante 2");
 				ejecutar(directorio, bmp, "cuadrante2.txt", i);
-				System.out.println("Cuadrante 3");
+				//System.out.println("Cuadrante 3");
 				ejecutar(directorio, bmp, "cuadrante3.txt", i);
 				// String directorio = direccion+"\\"+direccion_bmp.get(i).get(j);
 				// BMP archivo = new BMP();
@@ -225,8 +233,8 @@ public class Generador implements ActionListener {
 
 			pw.println(mediared + "," + mediagreen + "," + mediablue + "," + redvar + "," + greenvar + "," + bluevar
 					+ "," + i);
-			System.out.println(bmp + ": " + mediared + "," + mediagreen + "," + mediablue + "," + redvar + ","
-					+ greenvar + "," + bluevar + "," + i);
+			//System.out.println(bmp + ": " + mediared + "," + mediagreen + "," + mediablue + "," + redvar + ","
+			//		+ greenvar + "," + bluevar + "," + i);
 
 			pw.close();
 		} catch (IOException e) {
