@@ -2,6 +2,9 @@ package Archivo;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.FilenameFilter;
+
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -29,6 +32,16 @@ public class Selector_archivo implements ActionListener {
 		if (returnVal == JFileChooser.APPROVE_OPTION) {
 			if (chooser.getSelectedFile().exists()) {
 				dir.txt_direccion.setText(chooser.getSelectedFile().toString());
+				File directorio = new File(chooser.getSelectedFile().toString());
+				// Array que almacena los directorios de los archivos
+				// que se encuentran dentro de la carpeta seleccionada
+				String[] ficheros = directorio.list(new FilenameFilter() {
+					public boolean accept(File dir, String name) {
+						return name.toLowerCase().endsWith(".bmp");
+					}
+				});
+				int n_t = ficheros.length;
+				dir.txt_n_t.setText(n_t+"");
 			} else
 				JOptionPane.showMessageDialog(dir, "ERROR: Folder doesn't exist!");
 		}
