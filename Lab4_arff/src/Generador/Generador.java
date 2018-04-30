@@ -48,6 +48,7 @@ public class Generador implements ActionListener {
 		fotos();
 		// Metodo para obtener info
 		bmp_info();
+		// 
 	}
 
 	// Metodo que obtendra la lista que almacenara los nombres de las fotos
