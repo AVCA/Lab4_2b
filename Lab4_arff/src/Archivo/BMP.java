@@ -3,9 +3,15 @@ package Archivo;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
+
+import javax.imageio.ImageIO;
 
 public class BMP {
 	// V A R I A B L E S
@@ -48,100 +54,100 @@ public class BMP {
 
 	// Metodo: Imprime los valores de la cabezera
 	public void Info() {
-			String a = new String(new byte[] { bytes[0] });
-			String b = new String(new byte[] { bytes[1] });
-			String r;
-			System.out.println("            Cabecera:             ");
-			System.out.println("Tipo de Archivo: " + a + b);
-			r = hexa[5] + hexa[4] + hexa[3] + hexa[2];
-			System.out.println("Tamaño del archivo: " + Integer.parseInt(r, 16) + " bytes");
-			System.out.println("Inicio de la imagen: " + String.format("%02d", bytes[10] & 0xFF) + " byte");
-			r = hexa[17] + hexa[16] + hexa[15] + hexa[14];
-			System.out.println("Tamaño de la cabecera: " + Integer.parseInt(r, 16) + " bytes");
-			r = hexa[21] + hexa[20] + hexa[19] + hexa[18];
-			ancho = Integer.parseInt(r, 16);
-			System.out.println("Ancho de la imagen: " + Integer.parseInt(r, 16) + " pixeles");
-			r = hexa[25] + hexa[24] + hexa[23] + hexa[22];
-			largo = Integer.parseInt(r, 16);
-			System.out.println("Alto de la imagen: " + Integer.parseInt(r, 16) + " pixeles");
-			r = hexa[29] + hexa[28];
-			System.out.println("Profundidad de la imagen: " + Integer.parseInt(r, 16));
-			r = hexa[33] + hexa[32] + hexa[31] + hexa[30];
-			System.out.println("Metodo de compresion: " + Integer.parseInt(r, 16));
-			r = hexa[37] + hexa[36] + hexa[35] + hexa[34];
-			System.out.println("Tamaño de la imagen: " + Integer.parseInt(r, 16) + " bytes");
-			r = hexa[49] + hexa[48] + hexa[47] + hexa[46];
-			System.out.println("N° de colores de la paleta: " + Integer.parseInt(r, 16));
-			System.out.println("============================");
-			System.out.println("Colores RGB del 1° pixel:");
-			// Los pixeles comienzan desde el bit 54
-			// pero estan el en orden B G R
-			// por eso i comienza en R, es decir 56
-			// Aunque este sea el "primer" pixel grafico, enrealidad
-			// es el ultimo [esquina inferior derecha]
-			int i = 56;
-			System.out.println("R: " + Integer.parseInt(hexa[i--], 16));
-			System.out.println("G: " + Integer.parseInt(hexa[i--], 16));
-			System.out.println("B: " + Integer.parseInt(hexa[i--], 16));
-			rgb();
+		String a = new String(new byte[] { bytes[0] });
+		String b = new String(new byte[] { bytes[1] });
+		String r;
+		System.out.println("Inicio de la imagen: " + String.format("%02d", bytes[10] & 0xFF) + " byte");
+		r = hexa[21] + hexa[20] + hexa[19] + hexa[18];
+		ancho = Integer.parseInt(r, 16);
+		System.out.println("Ancho de la imagen: " + Integer.parseInt(r, 16) + " pixeles");
+		r = hexa[25] + hexa[24] + hexa[23] + hexa[22];
+		largo = Integer.parseInt(r, 16);
+		System.out.println("Alto de la imagen: " + Integer.parseInt(r, 16) + " pixeles");
+		rgb();
+		calculos();
 	}
 
 	public void rgb() {
-		pixel = new ArrayList<ArrayList<Integer>>();
-		
-		int i = ((int) bytes.length) - 1; // <-Total de bytes
-		for (int x = 0; x < largo; x++) {
-			for (int y = ancho; y > 0; y--) {
-				ArrayList<Integer> RGB = new ArrayList<Integer>();
-				// Empieza a leer desde el ultimo byte hasta el inicio
-				// De lo contrario la imagen se mostraria alrevez
-				int blue = Integer.parseInt(hexa[i--], 16);
-				RGB.add(blue);
-				int green = Integer.parseInt(hexa[i--], 16);
-				RGB.add(green);
-				int red = Integer.parseInt(hexa[i--], 16);
-				RGB.add(red);
-				pixel.add(RGB);
-			}
-		}
-		System.out.println("=============================");
-		System.out.println("Colores RGB por pixel:");
-		int pixel_cuadrante = pixel.size()/4;
-		int p_c = pixel_cuadrante;
-		int k=0;
-		cuadrantes = new ArrayList<ArrayList<ArrayList<Integer>>>();
-		ArrayList<ArrayList<Integer>> cuadrante = new ArrayList<ArrayList<Integer>>();
-		for(int j=0;j<pixel.size();j++) {
-			if(j==0) {
-				//System.out.println("=============================");
-				//System.out.println("Cuadrante :"+k);k++;
-				cuadrante = new ArrayList<ArrayList<Integer>>();
-			}
-			else
-			{
-				if(j==pixel_cuadrante)
-				{
-					cuadrantes.add(cuadrante);
-					pixel_cuadrante +=p_c;
-					cuadrante = new ArrayList<ArrayList<Integer>>();
-					//System.out.println("=============================");
-					//System.out.println("Cuadrante :"+k);k++;
+		FileWriter fichero = null;
+		PrintWriter pw = null;
+		try {
+			fichero = new FileWriter("datos.txt");
+			pw = new PrintWriter(fichero);
+			pixel = new ArrayList<ArrayList<Integer>>();
+
+			int i = ((int) bytes.length) - 1; // <-Total de bytes
+			for (int x = 0; x < largo; x++) {
+				for (int y = ancho; y > 0; y--) {
+					ArrayList<Integer> RGB = new ArrayList<Integer>();
+					// Empieza a leer desde el ultimo byte hasta el inicio
+					// De lo contrario la imagen se mostraria alrevez
+					int blue = Integer.parseInt(hexa[i--], 16);
+					RGB.add(blue);
+					int green = Integer.parseInt(hexa[i--], 16);
+					RGB.add(green);
+					int red = Integer.parseInt(hexa[i--], 16);
+					RGB.add(red);
+					pixel.add(RGB);
 				}
 			}
-			cuadrante.add(pixel.get(j));
-			//System.out.println(j+""+pixel.get(j));
-			if(j==pixel.size()-1) {
-				cuadrantes.add(cuadrante);
-			}
-		}
-		for(i=0; i<cuadrantes.size();i++) {
 			System.out.println("=============================");
-			System.out.println("Cuadrante "+i+":");
-			for(int j=0; j<cuadrantes.get(i).size(); j++ )
-			{
-				System.out.println(j+": "+cuadrantes.get(i).get(j));
+			System.out.println("Colores RGB por ooooo:");
+			int pixel_cuadrante = pixel.size() / 4;
+			int p_c = pixel_cuadrante;
+			int k = 0;
+			cuadrantes = new ArrayList<ArrayList<ArrayList<Integer>>>();
+			ArrayList<ArrayList<Integer>> cuadrante = new ArrayList<ArrayList<Integer>>();
+			for (int j = 0; j < pixel.size(); j++) {
+				if (j == 0) {
+					System.out.println("=============================");
+					System.out.println("Cuadrante :" + k);
+					k++;
+					cuadrante = new ArrayList<ArrayList<Integer>>();
+				} else {
+					if (j == pixel_cuadrante) {
+						cuadrantes.add(cuadrante);
+						pixel_cuadrante += p_c;
+						cuadrante = new ArrayList<ArrayList<Integer>>();
+						System.out.println("=============================");
+						System.out.println("Cuadrante :" + k);
+						k++;
+					}
+				}
+				cuadrante.add(pixel.get(j));
+				System.out.println(pixel.get(j).get(0));
+				pw.println(pixel.get(j).get(0));
+
+				if (j == pixel.size() - 1) {
+					cuadrantes.add(cuadrante);
+				}
 			}
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
+	}
+
+	public void calculos() {
+		int x = pixel.size() / 4;
+		for (int i = 0; i < 1; i++) {
+			System.out.println("=============================");
+			System.out.println("Cuadrante " + i + ":");
+			double r = 0, g = 0, b = 0;
+			double mr = 0, mg = 0, mb = 0;
+			for (int j = 0; j < cuadrantes.get(i).size(); j++) {
+				// System.out.println(j + ": " + cuadrantes.get(i).get(j));
+				r += cuadrantes.get(i).get(j).get(0);
+				g += cuadrantes.get(i).get(j).get(1);
+				b += cuadrantes.get(i).get(j).get(2);
+			}
+			mr = r / x;
+			mg = g / x;
+			mb = b / x;
+			System.out.println(mr + "," + mg + "," + mb + ",");
+		}
+		// Media
+
+		// Desviacion estandar
 	}
 
 	// Metodo: Crea la interfaz que mostrara la imagen
