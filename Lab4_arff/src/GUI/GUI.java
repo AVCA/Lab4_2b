@@ -26,6 +26,7 @@ public class GUI extends JFrame{
 	// TextField
 	public JTextField txt_direccion;
 	public JTextField txt_n;
+	public JTextField txt_n_t;
 	// Frame
 	public JFrame frame;
 	// Panel
@@ -37,6 +38,7 @@ public class GUI extends JFrame{
 	public JButton btn_generar;
 	// Scroll Panel
 	public JScrollPane scrollPane;
+	
 	
 	
 	// Se crea el objeto GUI
@@ -99,7 +101,20 @@ public class GUI extends JFrame{
 		txt_n.setColumns(3);
 		
 		JLabel lblNumeroDeFotos = new JLabel("Numero de fotos por persona");
-		panel_1.add(lblNumeroDeFotos);
+		panel_2.add(lblNumeroDeFotos);
+		
+		JPanel panel_3 = new JPanel();
+		panel_1.add(panel_3, BorderLayout.CENTER);
+		
+		txt_n_t = new JTextField();
+		txt_n_t.setEditable(false);
+		txt_n_t.setEnabled(false);
+		txt_n_t.setText("");
+		txt_n_t.setColumns(3);
+		panel_3.add(txt_n_t);
+		
+		JLabel lblNumeroDeFotos_1 = new JLabel("Numero de fotos totales");
+		panel_3.add(lblNumeroDeFotos_1);
 		
 		JPanel panel_espacio = new JPanel();
 		panel_north.add(panel_espacio, BorderLayout.SOUTH);

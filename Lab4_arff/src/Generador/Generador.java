@@ -7,6 +7,7 @@ import java.awt.image.BufferedImage;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
+import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
@@ -29,9 +30,8 @@ public class Generador implements ActionListener {
 	GUI gui;
 	ARFF fotos;
 	String direccion;
-	ArrayList<String> clases;
 	ArrayList<ArrayList<String>> direccion_bmp;
-	int n;
+	int n,n_t;
 
 	public Generador(GUI x) {
 		super();
@@ -45,14 +45,13 @@ public class Generador implements ActionListener {
 		direccion = gui.txt_direccion.getText();
 		n = Integer.parseInt(gui.txt_n.getText());
 		direccion_bmp = new ArrayList<ArrayList<String>>();
-		clases = new ArrayList<String>();
 		fotos = new ARFF();
 		// Metodo que obtendra la lista que almacenara los nombres de las fotos
 		fotos();
 		// Metodo para obtener info
 		bmp_info();
 		//
-		int m=direccion_bmp.size();
+		int m = direccion_bmp.size();
 		System.out.println("Generando rgbfotos.arff");
 		System.out.println(".....");
 		fotos.Lectura(m);
@@ -66,48 +65,59 @@ public class Generador implements ActionListener {
 		File directorio = new File(direccion);
 		// Array que almacena los directorios de los archivos
 		// que se encuentran dentro de la carpeta seleccionada
-		String[] ficheros = directorio.list();
-
-		// Metodo que me permite ordenar los archivos
-		List scrambled = Arrays.asList(ficheros);
-		Collections.sort(scrambled, new NaturalOrderComparator());
-
-		// Lista temporal que almacenara los bmps por persona
-		ArrayList bmp = new ArrayList<String>();
-		// Contador de bmps por persona
-		int j = 0;
-		// Recorremos todos los ficheros
-		for (int i = 0; i < ficheros.length; i++) {
-			// Mientras que el contador de bmps por persona
-			// sea menor a lo establecido almacenamos el nombre
-			// de la imagen
-			if (j < n) {
-				// Agregamos el nombre del bmp a la lista temporal
-				bmp.add(ficheros[i]);
-				// System.out.println(ficheros[i]);
-				// Aumentamos el contador de bmps por persona
-				j++;
-				if (i == ficheros.length - 1) {
-					direccion_bmp.add(bmp);
-				}
-			} else {
-				// Se llego al maximo de bmps por persona
-				// por lo que se agrega la lista temporal a la
-				// lista que almacena los bmps por persona
-				direccion_bmp.add(bmp);
-				// Inicializamos la lista temporal
-				bmp = new ArrayList<String>();
-				// Reiniciamos el contador de bmps por persona
-				j = 0;
-				i--;
+		String[] ficheros = directorio.list(new FilenameFilter() {
+			public boolean accept(File dir, String name) {
+				return name.toLowerCase().endsWith(".bmp");
 			}
+		});
+		n_t = ficheros.length;
+		//gui.txt_n_t.setText(n_t+"");
+		if (ficheros.length != 0) {
+			
+			// Metodo que me permite ordenar los archivos
+			List scrambled = Arrays.asList(ficheros);
+			Collections.sort(scrambled, new NaturalOrderComparator());
 
-		}
-		System.out.println("Archivos obtenidos");
-		for (int k = 0; k < direccion_bmp.size(); k++) {
-			System.out.println(k + ":" + direccion_bmp.get(k));
-		}
+			// Lista temporal que almacenara los bmps por persona
+			ArrayList bmp = new ArrayList<String>();
+			// Contador de bmps por persona
+			int j = 0;
+			// Recorremos todos los ficheros
+			for (int i = 0; i < ficheros.length; i++) {
+				// Mientras que el contador de bmps por persona
+				// sea menor a lo establecido almacenamos el nombre
+				// de la imagen
+				if (j < n) {
+					// Agregamos el nombre del bmp a la lista temporal
+					bmp.add(ficheros[i]);
+					// System.out.println(ficheros[i]);
+					// Aumentamos el contador de bmps por persona
+					j++;
+					if (i == ficheros.length - 1) {
+						direccion_bmp.add(bmp);
+					}
+				} else {
+					// Se llego al maximo de bmps por persona
+					// por lo que se agrega la lista temporal a la
+					// lista que almacena los bmps por persona
+					direccion_bmp.add(bmp);
+					// Inicializamos la lista temporal
+					bmp = new ArrayList<String>();
+					// Reiniciamos el contador de bmps por persona
+					j = 0;
+					i--;
+				}
 
+			}
+			System.out.println("Archivos obtenidos");
+			for (int k = 0; k < direccion_bmp.size(); k++) {
+				System.out.println(k + ":" + direccion_bmp.get(k));
+			}
+		}
+		else
+		{
+			System.out.println("ERROR: La carpeta no contiene ningun bmp");
+		}
 	}
 
 	public void bmp_info() {
@@ -116,20 +126,20 @@ public class Generador implements ActionListener {
 		// Ciclo por persona
 		for (int i = 0; i < direccion_bmp.size(); i++) {
 			// Ciclo por foto
-			//System.out.println("============================================");
-			//System.out.println("Persona: " + i);
+			// System.out.println("============================================");
+			// System.out.println("Persona: " + i);
 			for (int j = 0; j < direccion_bmp.get(0).size(); j++) {
-				//System.out.println("------------------------------");
-				//System.out.println("Foto: "+j);
+				// System.out.println("------------------------------");
+				// System.out.println("Foto: "+j);
 				String directorio = direccion + "\\" + direccion_bmp.get(i).get(j);
 				String bmp = direccion_bmp.get(i).get(j);
-				//System.out.println("Cuadrante 0");
+				// System.out.println("Cuadrante 0");
 				ejecutar(directorio, bmp, "cuadrante0.txt", i);
-				//System.out.println("Cuadrante 1");
+				// System.out.println("Cuadrante 1");
 				ejecutar(directorio, bmp, "cuadrante1.txt", i);
-				//System.out.println("Cuadrante 2");
+				// System.out.println("Cuadrante 2");
 				ejecutar(directorio, bmp, "cuadrante2.txt", i);
-				//System.out.println("Cuadrante 3");
+				// System.out.println("Cuadrante 3");
 				ejecutar(directorio, bmp, "cuadrante3.txt", i);
 				// String directorio = direccion+"\\"+direccion_bmp.get(i).get(j);
 				// BMP archivo = new BMP();
@@ -141,7 +151,7 @@ public class Generador implements ActionListener {
 			}
 		}
 	}
-	
+
 	public void archivos_txt() {
 		try {
 			FileWriter fichero = new FileWriter("cuadrante0.txt");
@@ -162,16 +172,16 @@ public class Generador implements ActionListener {
 		PrintWriter pw = null;
 		try {
 			if (!file2.exists()) {
-	            file2.createNewFile();
-	        }
+				file2.createNewFile();
+			}
 			fichero = new FileWriter(file2.getAbsoluteFile(), true);
 			pw = new PrintWriter(fichero);
 			image = ImageIO.read(file);
 			int ancho1 = image.getWidth() / 2;
 			int alto1 = image.getHeight() / 2;
 			int ancho2 = image.getWidth();
-            int alto2 = image.getHeight();
-            
+			int alto2 = image.getHeight();
+
 			int a = 0, b = 0, d = 0, e = 0;
 			switch (txt) {
 			case "cuadrante0.txt":
@@ -233,8 +243,9 @@ public class Generador implements ActionListener {
 
 			pw.println(mediared + "," + mediagreen + "," + mediablue + "," + redvar + "," + greenvar + "," + bluevar
 					+ "," + i);
-			//System.out.println(bmp + ": " + mediared + "," + mediagreen + "," + mediablue + "," + redvar + ","
-			//		+ greenvar + "," + bluevar + "," + i);
+			// System.out.println(bmp + ": " + mediared + "," + mediagreen + "," + mediablue
+			// + "," + redvar + ","
+			// + greenvar + "," + bluevar + "," + i);
 
 			pw.close();
 		} catch (IOException e) {
