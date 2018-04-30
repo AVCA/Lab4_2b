@@ -102,6 +102,8 @@ public class Generador implements ActionListener {
 	}
 
 	public void bmp_info() {
+		// Crear los archivos
+		archivos_txt();
 		// Ciclo por persona
 		for (int i = 0; i < direccion_bmp.size(); i++) {
 			// Ciclo por foto
@@ -130,13 +132,31 @@ public class Generador implements ActionListener {
 			}
 		}
 	}
+	
+	public void archivos_txt() {
+		try {
+			FileWriter fichero = new FileWriter("cuadrante0.txt");
+			FileWriter fichero1 = new FileWriter("cuadrante1.txt");
+			FileWriter fichero2 = new FileWriter("cuadrante2.txt");
+			FileWriter fichero3 = new FileWriter("cuadrante3.txt");
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 
 	public void ejecutar(String directorio, String bmp, String txt, int i) {
-
 		File file = new File(directorio);
+		File file2 = new File(txt);
 		BufferedImage image;
+		FileWriter fichero = null;
+		PrintWriter pw = null;
 		try {
-			PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter(new File(txt))));
+			if (!file2.exists()) {
+	            file2.createNewFile();
+	        }
+			fichero = new FileWriter(file2.getAbsoluteFile(), true);
+			pw = new PrintWriter(fichero);
 			image = ImageIO.read(file);
 			int ancho1 = image.getWidth() / 2;
 			int alto1 = image.getHeight() / 2;
