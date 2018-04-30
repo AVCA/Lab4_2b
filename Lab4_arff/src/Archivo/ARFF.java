@@ -3,155 +3,89 @@ package Archivo;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Collections;
 
 public class ARFF {
-	// V A R I A B L E S:
-	public String relation = ""; // Nombre
-	public ArrayList<ArrayList<String>> class_attribute; // Clases de los atributos
-	public ArrayList<String> attribute; // Atributos
-	public ArrayList<ArrayList<String>> data; // Conjunto de datos
-	public String d="";
 
-	// T E M P O R A L E S:
-	private ArrayList<String> clases; // Lista temporal para las clases
-	private ArrayList<String> instancias;
-	private String clase[]; // Arreglo temporal para las clases
-	private String instancia[]; // Arreglo temporal para las instancias
-
-	/* M E T O D O S:
-	// Lectura del archivo ARFF:
-	//
-	// Estructura que debe de leer:
-	// @relation nombre_del_conjunto
-	// @attribute atributo {opcion1, opcion2, ...}
-	// @data opcion1, ... , opcion_n
-	// % comentario
-	 * 
-	 * */
-
-	public void Lectura(String direccion) {
-		d=direccion;
-		data = new ArrayList<ArrayList<String>>();
-		data.clear();
-		class_attribute = new ArrayList<ArrayList<String>>();
-		class_attribute.clear();
-		attribute = new ArrayList<String>();
-		attribute.clear();
-		File archivo = new File(direccion);
+	public void Lectura(int n) {
+		// Lectura
+		File cuadrante = null;
 		FileReader fr;
+		// Escritura
+		File file_arff = new File("rgbfotos.arff");
+		FileWriter arff = null;
+		PrintWriter pw = null;
 		try {
-			fr = new FileReader(archivo);
+			arff = new FileWriter(file_arff);
+			pw = new PrintWriter(arff);
+			// Comenzamos a generar el archivo ARFF
+			// @relation
+			pw.println("@relation rgbfotos");
+			pw.println("");
+			// @attribute
+			pw.println("@attribute mediarojo numeric");
+			pw.println("@attribute mediaverde numeric");
+			pw.println("@attribute mediaazul numeric");
+			pw.println("@attribute desvrojo numeric");
+			pw.println("@attribute desvverde numeric");
+			pw.println("@attribute desvazul numeric");
+			// @attribute personas {0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19}
+			pw.print("@attribute personas {");
+			for (int i = 0; i < n; i++) {
+				if (i == n - 1)
+					pw.print(i);
+				else
+					pw.print(i + ",");
+			}
+			pw.print("}");
+			pw.println("");
+			pw.println("");
+			// @data:
+			pw.println("@data");
+			pw.println("");
+
+			// Cuadrante 0
+			cuadrante = new File("cuadrante0.txt");
+			fr = new FileReader(cuadrante); // cuadrantek.txt
 			BufferedReader br = new BufferedReader(fr);
 			String linea;
-			while (!(linea = br.readLine()).matches("@data.*")) {
-				relation(br, linea);
-				attribute(br, linea);
-			}
+			// Leemos todo el contenido del cuadrantek
 			while ((linea = br.readLine()) != null) {
-				data(br,linea);
+				pw.println(linea);
 			}
-			Collections.shuffle(data);
-			//show();
+			// Cuadrante 1
+			cuadrante = new File("cuadrante1.txt");
+			fr = new FileReader(cuadrante); // cuadrantek.txt
+			br = new BufferedReader(fr);
+			// Leemos todo el contenido del cuadrantek
+			while ((linea = br.readLine()) != null) {
+				pw.println(linea);
+			}
+			// Cuadrante 2
+			cuadrante = new File("cuadrante2.txt");
+			fr = new FileReader(cuadrante); // cuadrantek.txt
+			br = new BufferedReader(fr);
+			// Leemos todo el contenido del cuadrantek
+			while ((linea = br.readLine()) != null) {
+				pw.println(linea);
+			}
+			// Cuadrante 3
+			cuadrante = new File("cuadrante3.txt");
+			fr = new FileReader(cuadrante); // cuadrantek.txt
+			br = new BufferedReader(fr);
+			// Leemos todo el contenido del cuadrantek
+			while ((linea = br.readLine()) != null) {
+				pw.println(linea);
+			}
 			br.close();
+			pw.close();
 		} catch (IOException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
-		}
-	}
-
-	/*
-	 * Metodo que busca y almacena el nombre del conjunto de datos
-	 */
-	public void relation(BufferedReader br, String linea) {
-		// Mientras no me tope con los datos:
-		// Si la linea comienza con @Atributte:
-		if (linea.matches("@relation.*"))
-			// Elimino la palabra @relation y me quedo solo con el nombre
-			relation = linea.replaceAll("@relation\\s", "");
-	}
-
-	/*
-	 * Metodo que busca y almacena las clases y atributos del conjunto de datos
-	 * recibido del archivo .arff
-	 */
-	public void attribute(BufferedReader br, String linea) {
-		// Si la linea comienza con @Atributte:
-		if (linea.matches("@attribute.*")) {
-			// Tomamos la linea entera:
-			String name = linea.replaceAll("@attribute", "");
-			// Eliminamos todo lo que no sea el nombre del atributo
-			name = name.replaceAll(".[{].*[}]", "");
-			// Eliminamos espacios
-			name = name.replaceAll(" ", "");
-			// Guardamos el atributo en la lista attribute
-			attribute.add(name);
-		}
-		// Una vez almacenado el atributo continuaremos con sus clases
-		// las clases se encontraran dentro de { }
-		if (linea.matches(".*[{].*[}]")) {
-			// Tomamos la linea entera y la dividimos por los { }
-			// Esto se almacenara en un arreglo indefinido clase[]
-			// que contendra las clases temporalmente
-			// Ejemplo: {sunny, overcast, rainy} -> clase
-			// clase[0] = sunny; clase[1] = overcast, clase[2]=rainy
-			clase = (linea.substring(linea.indexOf('{') + 1, linea.indexOf('}'))).split(",");
-			// Creamos la sublista clases para almacenarla
-			// dentro del arrayList para las clases
-			// Ejemplo: class_attribute[0][clases]
-			// clases[0][sunny], clases[0][overcast], clases[0][rainy]
-			clases = new ArrayList<String>();
-			for (int i = 0; i < clase.length; i++) {
-				// Quitamos cualquier espacio que nos sobre
-				clases.add(clase[i].replace(" ", ""));
-			}
-			// Agregamos la lista de clases a la lista principal
-			class_attribute.add(clases);
-		}
-	}
-
-	/*
-	 * Metodo que busca y almacena las instancias
-	 */
-	public void data(BufferedReader br, String linea) {
-		instancia = linea.split(",");
-		int n=attribute.size();
-		instancias = new ArrayList<String>();
-		for(int i=0; i<n; i++)
-		{
-			instancias.add(instancia[i]);
-		}
-		data.add(instancias);
-	}
-
-	/*
-	 * Metodo que muestra toda la informacion almacenada
-	 */
-	public void show() {
-		System.out.println("Nombre: " + relation);
-		// Atributos y sus clases correspondientes:
-		for (int i = 0; i < class_attribute.size(); i++) {
-			System.out.println("-----");
-			// Atributo:
-			System.out.println("Atributo: "+ attribute.get(i));
-			for (int j = 0; j < class_attribute.get(i).size(); j++) {
-				// Clases por atributo:
-				System.out.println("-"+class_attribute.get(i).get(j));
-			}
-		}
-		// Instancias:
-		System.out.println("");
-		System.out.println("-----");
-		System.out.println("Datos: ");
-		for(int i=0; i<data.size(); i++) {
-			System.out.print("[");
-			for(int j=0; j<data.get(i).size(); j++) {
-				System.out.print(data.get(i).get(j)+",");
-			}
-			System.out.print("]");
-			System.out.println("");
 		}
 	}
 
