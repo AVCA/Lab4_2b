@@ -141,11 +141,11 @@ public class Generador implements ActionListener {
 				ejecutar(directorio, bmp, "cuadrante2.txt", i);
 				// System.out.println("Cuadrante 3");
 				ejecutar(directorio, bmp, "cuadrante3.txt", i);
-				// String directorio = direccion+"\\"+direccion_bmp.get(i).get(j);
-				// BMP archivo = new BMP();
-				// File file = new File(directorio);
-				// archivo.Bytes(file); // <-- Primero lee los bytes
-				// archivo.Info();// <-- Imprime la informacion de la cabecera
+				// 
+				BMP archivo = new BMP();
+				File file = new File(directorio);
+				archivo.Bytes(file); // <-- Primero lee los bytes
+				archivo.Info();// <-- Imprime la informacion de la cabecera
 				// archivo.ventana(file);// <-- Crea un Frame para mostrar el BMP
 				// archivo.Canvas();// <-- Crea un Canvas que sirve para pintar pixeles
 			}

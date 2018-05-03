@@ -69,62 +69,84 @@ public class BMP {
 	}
 
 	public void rgb() {
-		FileWriter fichero = null;
-		PrintWriter pw = null;
-		try {
-			fichero = new FileWriter("datos.txt");
-			pw = new PrintWriter(fichero);
-			pixel = new ArrayList<ArrayList<Integer>>();
+		pixel = new ArrayList<ArrayList<Integer>>();
 
-			int i = ((int) bytes.length) - 1; // <-Total de bytes
-			for (int x = 0; x < largo; x++) {
-				for (int y = ancho; y > 0; y--) {
-					ArrayList<Integer> RGB = new ArrayList<Integer>();
-					// Empieza a leer desde el ultimo byte hasta el inicio
-					// De lo contrario la imagen se mostraria alrevez
-					int blue = Integer.parseInt(hexa[i--], 16);
-					RGB.add(blue);
-					int green = Integer.parseInt(hexa[i--], 16);
-					RGB.add(green);
-					int red = Integer.parseInt(hexa[i--], 16);
-					RGB.add(red);
-					pixel.add(RGB);
-				}
+		int i = ((int) bytes.length) - 1; // <-Total de bytes
+		for (int x = 0; x < largo; x++) {
+			for (int y = ancho; y > 0; y--) {
+				ArrayList<Integer> RGB = new ArrayList<Integer>();
+				// Empieza a leer desde el ultimo byte hasta el inicio
+				// De lo contrario la imagen se mostraria alrevez
+				int blue = Integer.parseInt(hexa[i--], 16);
+				RGB.add(blue);
+				int green = Integer.parseInt(hexa[i--], 16);
+				RGB.add(green);
+				int red = Integer.parseInt(hexa[i--], 16);
+				RGB.add(red);
+				pixel.add(RGB);
 			}
-			System.out.println("=============================");
-			System.out.println("Colores RGB por ooooo:");
-			int pixel_cuadrante = pixel.size() / 4;
-			int p_c = pixel_cuadrante;
-			int k = 0;
-			cuadrantes = new ArrayList<ArrayList<ArrayList<Integer>>>();
-			ArrayList<ArrayList<Integer>> cuadrante = new ArrayList<ArrayList<Integer>>();
-			for (int j = 0; j < pixel.size(); j++) {
-				if (j == 0) {
-					System.out.println("=============================");
-					System.out.println("Cuadrante :" + k);
-					k++;
-					cuadrante = new ArrayList<ArrayList<Integer>>();
-				} else {
-					if (j == pixel_cuadrante) {
-						cuadrantes.add(cuadrante);
-						pixel_cuadrante += p_c;
-						cuadrante = new ArrayList<ArrayList<Integer>>();
-						System.out.println("=============================");
-						System.out.println("Cuadrante :" + k);
-						k++;
-					}
-				}
-				cuadrante.add(pixel.get(j));
-				System.out.println(pixel.get(j).get(0));
-				pw.println(pixel.get(j).get(0));
-
-				if (j == pixel.size() - 1) {
-					cuadrantes.add(cuadrante);
-				}
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
 		}
+		System.out.println("=============================");
+		System.out.println("Colores RGB:");
+		cuadrante(0);
+	}
+
+	public void cuadrante(int i) {
+		int pixel_cuadrante = pixel.size() / 4; // Total de pixeles por cuadrante
+		cuadrantes = new ArrayList<ArrayList<ArrayList<Integer>>>(); // Lista que almacena las listas de pixeles por cuadrante
+		ArrayList<ArrayList<Integer>> cuadrante = new ArrayList<ArrayList<Integer>>(); // Lista de pixeles
+		// Rangos que definiran que pixeles tomar:
+		// Variables que ocupo:
+		// int ancho
+		// int largo
+		int ancho_mitad = ancho/2;
+		int largo_mitad = largo/2;
+		int a = 0, b = 0, d = 0, e = 0;
+		switch(i) {
+		case 0:
+			a = 0;
+			b = 0;
+			d = largo;
+			e = ancho;
+			break;
+		case 1:
+			a = 0;
+			b = ancho;
+			d = largo;
+			e = ancho_mitad;
+			break;
+		case 2:
+			a = largo;
+			b = 0;
+			d = largo_mitad;
+			e = ancho;
+			break;
+		case 3:
+			a = largo;
+			b = ancho;
+			d = largo_mitad;
+			e = ancho;
+			break;
+		}
+		
+		int redacum = 0, blueacum = 0, greenacum = 0;
+		double redvar = 0, greenvar = 0, bluevar = 0;
+		
+		for (int y = a; y < d; y++) {
+			for (int z = b; z < e; z++) {
+				
+				// int red = c.getRed();
+				// int green = c.getGreen();
+				// int blue = c.getBlue();
+				//redacum += red;
+				//blueacum += blue;
+				//greenacum += green;
+			}
+		}
+
+		//int mediared = redacum / (ancho1 * alto1);
+		//int mediagreen = greenacum / (ancho1 * alto1);
+		//int mediablue = blueacum / (ancho1 * alto1);
 	}
 
 	public void calculos() {
